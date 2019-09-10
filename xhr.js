@@ -63,14 +63,21 @@ var data = JSON.stringify({
     ]
 });
 var xhr2 = new XMLHttpRequest();
-xhr2.addEventListener("readystatechange", function () {
-    if (this.readyState === this.DONE) {
-        onNext(xhr2.responseText);
-    }
-});
 xhr2.open("POST", "https://osome-botometer.p.rapidapi.com/2/check_account");
 xhr2.setRequestHeader("x-rapidapi-host", "osome-botometer.p.rapidapi.com");
 xhr2.setRequestHeader("x-rapidapi-key", "85a5062f8cmshf74ca2eeebd0ea2p179597jsn732b4d233a5e");
 xhr2.setRequestHeader("content-type", "application/json");
 xhr2.setRequestHeader("accept", "application/json");
 xhr2.send(data);
+xhr2.addEventListener('load', function() {
+    if (xhr2 === 200) {
+        onNext(xhr2.responseText);
+    }
+    else {
+        onError(xhr2.response);
+    }
+});
+xhr2.addEventListener('progress', function() {});
+xhr2.addEventListener('error', function() {
+    console.log(`Network Error`);
+});
